@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang = "en-US">
+<head>
+    <meta charset = "UTF-8">
+    <title>Frogger</title>
+    <link rel = "stylesheet" type = "text/css" href = "styles/miniGame.css">
+</head>
+<body onload = "miniGame.screens.initialize();">
+    <!-- <div id = "game" style = "background-image: url('space.jpg');"> -->
+    <div id = "game" width="640" height="700">
+
+        <div id = "menuPage" class = "screen">
+            <ul class = "menu">
+                <li><button id = "id-new-game">New&nbsp;Game</button></li>
+                <li><button id = "id-high-scores">High&nbsp;Scores</button></li>
+                <li><button id = "id-controls">Controls</button></li>                
+                <li><button id = "id-about">About</button></li>
+            </ul>
+        </div>
+        
+        <div id="gamePage" style="text-align: center; text-justify: auto;" class = "screen">
+                <canvas id = "canvas-main" width="600" height="700" style="background-image: url('http://res.cloudinary.com/dsvfpq1b7/image/upload/v1485602088/Frogger/bg_with_water.png');"></canvas>
+        </div>
+
+		<div id = "highscoresPage" class = "screen">
+			<h1>High Scores</h1>
+			<ol id = "high-scores-list">
+				<li>7000</li>
+			</ol>
+			<ul class = "menu">
+				<li><button id = "id-high-scores-back">Back</button></li>
+			</ul>
+        </div>
+
+        <div id = "controlsPage" class = "screen">
+			<h1>About</h1>
+			<p>Developed by</p>
+			<p>Brett Spackman</p>
+			<ul class = "menu">
+				<li><button id = "id-controls-back">Back</button></li>
+			</ul>
+        </div>
+        
+		<div id = "aboutPage" class = "screen">
+			<h1>About</h1>
+			<p>Developed by</p>
+			<p>Brett Spackman</p>
+			<ul class = "menu">
+				<li><button id = "id-about-back">Back</button></li>
+			</ul>
+        </div>
+	</div>
+	
+	<script>
+		var miniGame = {
+			pages : {},
+		};
+    </script>
+
+    <script src = "scripts/Graphics.js"></script>
+    <script src = "scripts/input.js"></script>
+    <script src = "scripts/HighScores.js"></script>
+    <script src = "pages/screens.js"></script>
+    <script src = "scripts/Components.js"></script>    
+    <script src = "scripts/model.js"></script>
+    <script src = "pages/menuPage.js"></script>
+    <script src = "pages/gamePage.js"></script>
+    <script src = "scripts/Frog.js"></script>
+    <script src = "pages/highscoresPage.js"></script>
+    <script src = "pages/controlsPage.js"></script>    
+    <script src = "pages/aboutPage.js"></script>
+</body>
+</html>
