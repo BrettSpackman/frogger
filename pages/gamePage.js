@@ -21,7 +21,7 @@ miniGame.pages['gamePage'] = (function(model, screens, graphics, input) {
         frog = miniGame.frog({
 			center: {x: 300, y: 680},
 			radius: 21,
-			moveRate: .1,
+			moveRate: 1,
 			context: context,
 			size: {width: 40, height: 50},
 			imageSrc: '/images/frog1.png',
@@ -55,7 +55,7 @@ miniGame.pages['gamePage'] = (function(model, screens, graphics, input) {
                     car = miniGame.car({
                         center: {x: xpos, y: StartY-(i*54)},
                         radius: 21,
-                        moveRate: .1,
+                        moveRate: i,
                         context: context,
                         size: {width: 90, height: 45},
                         imageSrc: '/images/blueCar.png',
@@ -66,20 +66,23 @@ miniGame.pages['gamePage'] = (function(model, screens, graphics, input) {
         }
     }
 
-
     function createLogs(){
         let StartY = 303
         for(let i=0;i<5;i++){
-            logs.push(
-                log = miniGame.log({
-                    center: {x: 0, y: StartY-(i*54)},
-                    radius: 21,
-                    moveRate: .1,
-                    context: context,
-                    size: {width: 150, height: 45},
-                    imageSrc: '/images/medLog.png',
-                })
-            );
+            let xpos = Math.round(Math.random()*300)
+            while(xpos < 600){
+                logs.push(
+                    log = miniGame.log({
+                        center: {x: xpos, y: StartY-(i*54)},
+                        radius: 21,
+                        moveRate: i,
+                        context: context,
+                        size: {width: 150, height: 45},
+                        imageSrc: '/images/medLog.png',
+                    })
+                );
+                xpos += Math.round(Math.random()*300+200)
+            }
         }
     }
     

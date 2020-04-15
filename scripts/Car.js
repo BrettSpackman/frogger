@@ -15,18 +15,18 @@ miniGame.car = function(spec) {
         
         context.save();
 
-        if(center.x > 640){ // this wraps cars
-            center.x = -40;
+        if(center.x > 600 + spec.size.width/2){ // this wraps cars
+            center.x = -spec.size.width/2;
         }
 
         if(dir==1){ // right traveling cars
-            center.x += 1;
+            center.x += spec.moveRate;
             context.translate(center.x, center.y);
             context.translate(-center.x, -center.y);
         }
         else{ // left traveling cars
             //context.translate(size.width, 0);
-            center.x += 1;
+            center.x += spec.moveRate;
             context.translate(center.x+600, center.y);
             context.translate(-center.x, -center.y);
             context.scale(-1,1);
@@ -48,54 +48,9 @@ miniGame.car = function(spec) {
         get image() { return image; },
         get center() { return spec.center; },
         get radius() { return spec.radius; },
-        get size() { return spec.size; }
+        get size() { return spec.size; },
+        get moveRate() { return spec.moveRate; },
     };
 
     return api;
 }
-
-// miniGame.car = function (spec) {
-//     'use strict';
-
-//     this.carImage = new Image();
-//     this.revCarImage = new Image();
-//     this.carImage.src = attributes.src;
-//     this.revCarImage.src = attributes.src_reversed;
-
-//   function draw(context) {
-//     if (this.direction) {
-//       context.drawImage(this.carImage, 15, 245, 130, 70, this.pos.x, this.pos.y, this.width, this.height);
-//     } else {
-//       context.drawImage(this.revCarImage, this.pos.x, this.pos.y, this.width, this.height);
-//     }
-//   }
-
-//   function position(pos) {
-//     spec.center.x = 20;
-//     spec.center.y = 20;
-// }
-
-//   // out_of_bounds() {
-//   //   if (this.direction) {
-//   //     return this.pos.x >= this.canvasWidth;
-//   //   } else {
-//   //     return this.pos.x + this.width <= 0;
-//   //   }
-//   // }
-
-//   let api = {
-//     draw: draw,
-//     position: position,
-//     get position() { return spec.position; },
-//     get vel() { return this.vel; },
-//     get width() { return width; },
-//     get height() { return height; },
-//     get canvasWidth() { return canvasWidth; },
-//     get src() { return src; },
-//     get src_reversed() { return src_reversed; },
-//     get direction() { return direction; },
-//     get lane() { return lane; },
-// };
-
-// return api;
-// }
