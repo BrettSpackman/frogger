@@ -10,19 +10,27 @@ miniGame.frog = function(spec) {
     image.src = spec.imageSrc;
 
     function moveLeft(elapsedTime) {
-        spec.center.x -= 36;
+        if(spec.center.x > 12){
+            spec.center.x -= 36;
+        }
     }
 
     function moveRight(elapsedTime) {
-        spec.center.x += 36;
+        if(spec.center.x < 588){
+            spec.center.x += 36;
+        }
     }
 
     function moveUp(elapsedTime) {
-        spec.center.y -= 54;
+        if(spec.center.y > 40){
+            spec.center.y -= 54;
+        }
     }
 
     function moveDown(elapsedTime) {
-        spec.center.y += 54;
+        if(spec.center.y < 680){
+            spec.center.y += 54;
+        }
     }
 
     function moveTo(pos) {

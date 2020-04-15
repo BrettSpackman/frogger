@@ -9,7 +9,8 @@ miniGame.pages['gamePage'] = (function(model, screens, graphics, input) {
         canvas = document.getElementById("canvas-main"),
         context = canvas.getContext('2d'),
         frog = null,
-        frogs = [],
+        padFrog = null,
+        padFrogs = [],
         pads = [false, false, false, false, false],
         level = 1,
         car = null,
@@ -151,8 +152,8 @@ miniGame.pages['gamePage'] = (function(model, screens, graphics, input) {
             console.log("true")
             pads[padNum-1] = true;
 
-            frogs.push(
-                frog = miniGame.frog({
+            padFrogs.push(
+                pagFrog = miniGame.frog({
                     center: {x: frog.center.x, y: frog.center.y},
                     radius: 21,
                     moveRate: .1,
@@ -161,13 +162,15 @@ miniGame.pages['gamePage'] = (function(model, screens, graphics, input) {
                     imageSrc: '/images/frog1.png',
                 })
             )
+
+            frog.center.x = 300;
+            frog.center.y = 680;
         }
         else{
-            gameOver;
+            gameOver();
         }
 
-        console.log(frogs);
-
+        console.log(padFrogs);
 
         //context.save();
         //context.drawImage(frogIMG, frog.center.x, frog.center.y, frog.size.width, frog.size.height); // TODO: this isnt working
@@ -175,6 +178,8 @@ miniGame.pages['gamePage'] = (function(model, screens, graphics, input) {
 
     function gameOver(){
         pads = [false, false, false, false, false]
+        frog.center.x = 300;
+        frog.center.y = 680;
         console.log("game over");
     }
 
@@ -198,8 +203,8 @@ miniGame.pages['gamePage'] = (function(model, screens, graphics, input) {
         for(let i=0; i<logs.length;i++){
             logs[i].render();
         }
-        for(let i=0; i<frogs.length;i++){
-            frogs[i].render();
+        for(let i=0; i<padFrogs.length;i++){
+            padFrogs[i].render();
         }
         //testFrog.render();
         //model.render();
