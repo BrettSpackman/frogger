@@ -180,13 +180,27 @@ miniGame.pages['gamePage'] = (function(model, screens, graphics, input) {
 	}
 
 	function update(elapsedTime) {
-        model.update(elapsedTime);
+        //model.update(elapsedTime);
         endHit();
 	}
 
 	function render() {
         graphics.clear();
+
+        for(let i=0; i<logs.length;i++){
+            if(logs[i].center.y == 303 || logs[i].center.y == 195 || logs[i].center.y == 87){
+                logs[i].render(-1);
+            }
+            else{
+                logs[i].render(1);
+            }
+        }
+
         frog.render();
+
+        for(let i=0; i<padFrogs.length;i++){
+            padFrogs[i].render();
+        }
 
         for(let i=0; i<cars.length;i++){
             if(cars[i].center.y == 627 || cars[i].center.y == 465){
@@ -196,19 +210,6 @@ miniGame.pages['gamePage'] = (function(model, screens, graphics, input) {
                 cars[i].render(1);
             }
         }
-        for(let i=0; i<logs.length;i++){
-            if(logs[i].center.y == 303 || logs[i].center.y == 195 || logs[i].center.y == 87){
-                logs[i].render(-1);
-            }
-            else{
-                logs[i].render(1);
-            }
-        }
-        for(let i=0; i<padFrogs.length;i++){
-            padFrogs[i].render();
-        }
-        //testFrog.render();
-        //model.render();
 	}
 
 	function gameLoop(time) {
