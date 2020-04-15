@@ -72,6 +72,38 @@ ul.menu li button:active {
 	background: rgb(0, 0, 0);
 }
 
+ul.controls {
+	text-align: center;
+	padding: 0;
+	margin: 0;
+	list-style: none;
+}
+
+ul.controls li {
+	margin: 0.8em 0;
+}
+
+ul.controls li button {
+	font-family: Arial, sans-serif;
+	font-size: 0.6em;
+	color: white;
+	width: 5em;
+	height: 1.5em;
+	background:black;
+	border: 0.1em solid white;
+	border-radius: 0.5em;
+	box-shadow: 0.2em 0.2em 0.3em rgb(0, 0, 0);
+}
+
+ul.controls li button:hover {
+	background: white;
+}
+
+ul.controls li button:active {
+	color: #CECEF6;
+	background: rgb(0, 0, 0);
+}
+
 #gamePage div h1 {
 	font-size: 1em;
 	text-align: center;

@@ -1,6 +1,4 @@
 miniGame.pages['gamePage'] = (function(model, screens, graphics, input) {
-    // import Car from "./car";
-    // import Log from "./log";
 
     var keyboard = input.Keyboard(),
         mouse = input.Mouse(),
@@ -17,16 +15,9 @@ miniGame.pages['gamePage'] = (function(model, screens, graphics, input) {
         log = null,
         cars = [],
         logs = [];
-        
-
-        // let imageReady = false;
-        // let frogIMG = new Image();
-        // frogIMG.onload = function() {
-        //     imageReady = true;
-        // };
-        // frogIMG.src = "/images/frog1.png";
 
 	function initialize() {
+
         frog = miniGame.frog({
 			center: {x: 300, y: 680},
 			radius: 21,
@@ -38,7 +29,6 @@ miniGame.pages['gamePage'] = (function(model, screens, graphics, input) {
 
         createCars();
         createLogs();
-        //addCars();
         
 		keyboard.registerCommand('s', frog.moveDown);
         keyboard.registerCommand('w', frog.moveUp);
@@ -56,20 +46,26 @@ miniGame.pages['gamePage'] = (function(model, screens, graphics, input) {
     }
 
     function createCars(){
-        let StartY = 627
-        for(let i=0;i<5;i++){
-            cars.push(
-                car = miniGame.car({
-                    center: {x: 0, y: StartY-(i*54)},
-                    radius: 21,
-                    moveRate: .1,
-                    context: context,
-                    size: {width: 90, height: 45},
-                    imageSrc: '/images/blueCar.png',
-                })
-            );
+        let StartY = 681
+        console.log("adding cars!")
+        for(i=1; i<=5; i++){
+            let xpos = Math.round(Math.random()*300)
+            while(xpos < 600){
+                cars.push(
+                    car = miniGame.car({
+                        center: {x: xpos, y: StartY-(i*54)},
+                        radius: 21,
+                        moveRate: .1,
+                        context: context,
+                        size: {width: 90, height: 45},
+                        imageSrc: '/images/blueCar.png',
+                        })
+                );
+                xpos += Math.round(Math.random()*200+150)
+            }
         }
     }
+
 
     function createLogs(){
         let StartY = 303
@@ -86,45 +82,8 @@ miniGame.pages['gamePage'] = (function(model, screens, graphics, input) {
             );
         }
     }
-
-    function addCars() {
-        // direction 0 = left
-        // direction 1 = right
-        cars.push(createCar(1, 0, 80));
-        cars.push(createCar(1, 0, 240));
-        cars.push(createCar(1, 0, 420));
-        cars.push(createCar(2, 1, 350));
-        cars.push(createCar(2, 1, 250));
-        cars.push(createCar(2, 1, 80));
-        cars.push(createCar(3, 1, 320));
-        cars.push(createCar(3, 1, 200));
-        cars.push(createCar(3, 1, 70));
-        cars.push(createCar(4, 0, 300));
-        cars.push(createCar(4, 0, 25));
-        cars.push(createCar(5, 1, 120));
-        cars.push(createCar(5, 1, 290));
-        cars.push(createCar(5, 1, 10));
-        console.log(cars);
-      }
-
-    function createCar(lane, direction, x) {
-        let startY = 517;
-        let velX = direction === 0 ? -1 * level : 1 * level;
-        car = miniGame.car({
-            pos: {x: x, y: startY - lane * this.frogVStep},
-            vel: velX, 
-            width: 45, 
-            height: 30, 
-            canvasWidth: this.canvas.width,
-            src: 'http://res.cloudinary.com/dsvfpq1b7/image/upload/v1485501354/Frogger/logs_cars_death.png',
-            src_reversed: 'http://res.cloudinary.com/dsvfpq1b7/image/upload/v1485501353/Frogger/car_left.png',
-            direction: direction, 
-            lane: lane, 
-        })
-      }
     
     function endHit(){
-        console.log(frog.center.x);
         if(frog.center.y <= 40){
             if(frog.center.x == 84) {
                 padHit(1, frog);
@@ -149,7 +108,6 @@ miniGame.pages['gamePage'] = (function(model, screens, graphics, input) {
 
     function padHit(padNum, frog){
         if(pads[padNum-1] == false){
-            console.log("true")
             pads[padNum-1] = true;
 
             padFrogs.push(
@@ -170,10 +128,6 @@ miniGame.pages['gamePage'] = (function(model, screens, graphics, input) {
             gameOver();
         }
 
-        console.log(padFrogs);
-
-        //context.save();
-        //context.drawImage(frogIMG, frog.center.x, frog.center.y, frog.size.width, frog.size.height); // TODO: this isnt working
     }
 
     function gameOver(){
@@ -197,8 +151,14 @@ miniGame.pages['gamePage'] = (function(model, screens, graphics, input) {
 	function render() {
         graphics.clear();
         frog.render();
+
         for(let i=0; i<cars.length;i++){
-            cars[i].render();
+            if(cars[i].center.y == 627 || cars[i].center.y == 465){
+                cars[i].render(-1);
+            }
+            else{
+                cars[i].render(1);
+            }
         }
         for(let i=0; i<logs.length;i++){
             logs[i].render();

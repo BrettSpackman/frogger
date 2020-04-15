@@ -8,17 +8,29 @@ miniGame.car = function(spec) {
     };
     image.src = spec.imageSrc;
 
-    function render() {
+    function render(dir) {
         const context = spec.context
         const center = spec.center
         const size = spec.size
         
         context.save();
 
-        center.x += 1;
-        context.translate(center.x, center.y);
-        //context.rotate(rotation);
-        context.translate(-center.x, -center.y);
+        if(center.x > 640){ // this wraps cars
+            center.x = -40;
+        }
+
+        if(dir==1){ // right traveling cars
+            center.x += 1;
+            context.translate(center.x, center.y);
+            context.translate(-center.x, -center.y);
+        }
+        else{ // left traveling cars
+            //context.translate(size.width, 0);
+            center.x += 1;
+            context.translate(center.x+600, center.y);
+            context.translate(-center.x, -center.y);
+            context.scale(-1,1);
+        }
 
         context.drawImage(
             image,

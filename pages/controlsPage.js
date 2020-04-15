@@ -1,4 +1,4 @@
-miniGame.pages['controlsPage'] = (function(screens) {
+miniGame.pages['controlsPage'] = (function(screens, input) {
 
 	function initialize() {
 		document.getElementById('id-controls-back').addEventListener(
@@ -7,12 +7,11 @@ miniGame.pages['controlsPage'] = (function(screens) {
 	}
 
 	function run() {
-		//
-		// I know this is empty, there isn't anything to do.
+		
 	}
 
 	return {
 		initialize : initialize,
 		run : run
 	};
-}(miniGame.screens));
+}(miniGame.screens, miniGame.input));
