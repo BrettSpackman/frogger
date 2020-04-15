@@ -49,38 +49,71 @@ miniGame.pages['gamePage'] = (function(model, screens, graphics, input) {
         let StartY = 681
         console.log("adding cars!")
         for(i=1; i<=5; i++){
+            let w = 90;
+            if(i==4){w *= 2;}
+            else if(i==5){ w *= 3}
             let xpos = Math.round(Math.random()*300)
             while(xpos < 600){
                 cars.push(
                     car = miniGame.car({
                         center: {x: xpos, y: StartY-(i*54)},
                         radius: 21,
-                        moveRate: i,
+                        moveRate: (i%3+1)*.75,
                         context: context,
-                        size: {width: 90, height: 45},
-                        imageSrc: '/images/blueCar.png',
+                        size: {width: w, height: 45},
+                        imageSrc: '/images/car'+i+'.png',
                         })
                 );
-                xpos += Math.round(Math.random()*200+150)
+                xpos += Math.round(Math.random()*200+1.5*w)
             }
         }
     }
 
     function createLogs(){
-        let StartY = 303
-        for(let i=0;i<5;i++){
+        let StartY = 357
+        for(let i=1;i<=5;i++){
+            let w = 50;
+            if(i==2){ w *= 2; }
+            else if(i==3){ w *= 4; }
+            else if(i==5){ w *= 3; }
             let xpos = Math.round(Math.random()*300)
             while(xpos < 600){
                 logs.push(
                     log = miniGame.log({
                         center: {x: xpos, y: StartY-(i*54)},
                         radius: 21,
-                        moveRate: i,
+                        moveRate: (i%3+1)*.5,
                         context: context,
-                        size: {width: 150, height: 45},
-                        imageSrc: '/images/medLog.png',
+                        size: {width: w, height: 45},
+                        imageSrc: '/images/log'+i+'.png',
                     })
                 );
+                if(i==1 || i==4){ // add 1 turtle
+                    xpos += w;
+                    logs.push(
+                        log = miniGame.log({
+                            center: {x: xpos, y: StartY-(i*54)},
+                            radius: 21,
+                            moveRate: (i%3+1)*.5,
+                            context: context,
+                            size: {width: w, height: 45},
+                            imageSrc: '/images/log'+i+'.png',
+                        })
+                    )
+                    if(i==1){
+                        xpos += w;
+                        logs.push(
+                            log = miniGame.log({
+                                center: {x: xpos, y: StartY-(i*54)},
+                                radius: 21,
+                                moveRate: (i%3+1)*.5,
+                                context: context,
+                                size: {width: w, height: 45},
+                                imageSrc: '/images/log'+i+'.png',
+                            })
+                        )
+                    }
+                }
                 xpos += Math.round(Math.random()*300+200)
             }
         }
@@ -164,7 +197,12 @@ miniGame.pages['gamePage'] = (function(model, screens, graphics, input) {
             }
         }
         for(let i=0; i<logs.length;i++){
-            logs[i].render();
+            if(logs[i].center.y == 303 || logs[i].center.y == 195 || logs[i].center.y == 87){
+                logs[i].render(-1);
+            }
+            else{
+                logs[i].render(1);
+            }
         }
         for(let i=0; i<padFrogs.length;i++){
             padFrogs[i].render();

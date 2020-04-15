@@ -16,7 +16,7 @@ miniGame.log = function(spec) {
         context.save();
 
         center.x += spec.moveRate;
-        if(center.x > 600+spec.size.width/2){ // this wraps cars
+        if(center.x > 600+spec.size.width/2){ // this wraps logs
             center.x = -spec.size.width/2;
         }
 
