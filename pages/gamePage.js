@@ -148,7 +148,8 @@ miniGame.pages['gamePage'] = (function(model, screens, graphics, input) {
 
     function padHit(padNum, frog){
         if(pads[padNum-1] == false){
-            pads[padNum-1] == true;
+            console.log("true")
+            pads[padNum-1] = true;
 
             frogs.push(
                 frog = miniGame.frog({
@@ -160,6 +161,9 @@ miniGame.pages['gamePage'] = (function(model, screens, graphics, input) {
                     imageSrc: '/images/frog1.png',
                 })
             )
+        }
+        else{
+            gameOver;
         }
 
         console.log(frogs);
