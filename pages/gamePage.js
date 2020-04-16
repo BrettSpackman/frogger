@@ -20,7 +20,7 @@ miniGame.pages['gamePage'] = (function(model, screens, graphics, input) {
         cars = [],
         logs = [];
         let score = 0;
-        let seconds = 15;
+        let seconds = 30;
 
         const sleep = (milliseconds) => {
             return new Promise(resolve => setTimeout(resolve, milliseconds))
@@ -76,8 +76,8 @@ miniGame.pages['gamePage'] = (function(model, screens, graphics, input) {
         console.log("adding cars!")
         for(i=1; i<=5; i++){
             let w = 90;
-            if(i==4){w *= 2;}
-            else if(i==5){ w *= 3}
+            if(i==4){w *= 1.5;}
+            else if(i==5){ w *= 2}
             let xpos = Math.round(Math.random()*300)
             while(xpos < 600){
                 cars.push(
@@ -194,7 +194,7 @@ miniGame.pages['gamePage'] = (function(model, screens, graphics, input) {
                 })
             )
 
-            seconds = 15;
+            seconds = 30;
             progress = 680;
             frog.center.x = 300;
             frog.center.y = 680;
@@ -219,7 +219,7 @@ miniGame.pages['gamePage'] = (function(model, screens, graphics, input) {
         })
         console.log("game over");
 
-        seconds = 15;
+        seconds = 30;
         frog.center.y = -80000;   
 
         //deadFrog.render();
@@ -245,16 +245,20 @@ miniGame.pages['gamePage'] = (function(model, screens, graphics, input) {
 	}
 
 	function update(elapsedTime) {
+        console.log(cars.length);
         endHit();
         genCollision();
         incrementProg();
         if(frog.center.y < 305 && frog.center.y > 42){
             console.log("in river");
             if(!onLog()){ gameOver();}
+            else{
+                console.log("NOT GAME OVER")
+            }
         }
         document.getElementById('score').innerHTML = score;
         document.getElementById('time').innerHTML = seconds;
-        if(seconds == 0) {gameOver();}
+        //if(seconds == 0) {gameOver();}
     }
 
     function incrementProg(){
@@ -266,14 +270,11 @@ miniGame.pages['gamePage'] = (function(model, screens, graphics, input) {
     
     function genCollision(){
 
-        //console.log(cars)
-
-        //let frogHit = false;
-
         if(!frogHit){
             for(let i=0;i<cars.length;i++){
                 if(isHit(cars[i])){
                     frogHit = true;
+                    console.log("car hit frog");
                     gameOver();
                 }
             }
@@ -281,7 +282,7 @@ miniGame.pages['gamePage'] = (function(model, screens, graphics, input) {
     }
     
     function isHit(curCar){
-        //let time = performance.now();
+
         if(lineCircleIntersection(
             {x:curCar.center.x - curCar.size.width/2, y:curCar.center.y}, 
             {x:curCar.center.x + curCar.size.width/2, y:curCar.center.y}, 
@@ -289,15 +290,13 @@ miniGame.pages['gamePage'] = (function(model, screens, graphics, input) {
         {
             return true;
         }
-        //let finish = performance.now();
-        //console.log("Collision time: ",finish-time)
     }
 
     function onLog(){
         let on = false;
         logs.forEach(l => {
             if(frog.center.y == l.center.y){
-                if(frog.center.x >= l.center.x-l.size.width && frog.center.x <= l.center.x+l.size.width){
+                if(frog.center.x >= l.center.x-l.size.width/2 && frog.center.x <= l.center.x+l.size.width/2){
                     if(!on){
                         if(l.center.y == 248 || l.center.y ==140){frog.center.x += l.moveRate;}
                         else {frog.center.x -= l.moveRate;}
@@ -307,7 +306,7 @@ miniGame.pages['gamePage'] = (function(model, screens, graphics, input) {
                 }
             }
         });
-        return true;
+        return on;
     }
 
 	function lineCircleIntersection(pt1, pt2, circle) {

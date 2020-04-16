@@ -15,19 +15,28 @@ miniGame.log = function(spec) {
         
         context.save();
 
-        center.x += spec.moveRate;
-        if(center.x > 600+spec.size.width/2){ // this wraps logs
-            center.x = -spec.size.width/2;
-        }
+        // if(dir==1){ // right traveling cars
+            
+        //     context.translate(center.x, center.y);
+        //     context.translate(-center.x, -center.y);
+        // }
+        // else{ // left traveling cars
+        //     context.translate(center.x+600, center.y);
+        //     context.translate(-center.x, -center.y);
+        //     context.scale(-1,1);
+        // }
 
         if(dir==1){ // right traveling cars
-            context.translate(center.x, center.y);
-            context.translate(-center.x, -center.y);
+            center.x += spec.moveRate;
+            if(center.x > 600 + spec.size.width/2){ // this wraps cars
+                spec.center.x = -spec.size.width/2;
+            }
         }
         else{ // left traveling cars
-            context.translate(center.x+600, center.y);
-            context.translate(-center.x, -center.y);
-            context.scale(-1,1);
+            center.x -= spec.moveRate;
+            if(center.x < 0 - spec.size.width/2){ // this wraps cars
+                spec.center.x = 600+spec.size.width/2;
+            }
         }
 
         context.drawImage(

@@ -15,21 +15,17 @@ miniGame.car = function(spec) {
         
         context.save();
 
-        if(center.x > 600 + spec.size.width/2){ // this wraps cars
-            center.x = -spec.size.width/2;
-        }
-
         if(dir==1){ // right traveling cars
             center.x += spec.moveRate;
-            context.translate(center.x, center.y);
-            context.translate(-center.x, -center.y);
+            if(center.x > 600 + spec.size.width/2){ // this wraps cars
+                spec.center.x = -spec.size.width/2;
+            }
         }
         else{ // left traveling cars
-            //context.translate(size.width, 0);
-            center.x += spec.moveRate;
-            context.translate(center.x+600, center.y);
-            context.translate(-center.x, -center.y);
-            context.scale(-1,1);
+            center.x -= spec.moveRate;
+            if(center.x < 0 - spec.size.width/2){ // this wraps cars
+                spec.center.x = 600+spec.size.width/2;
+            }
         }
 
         context.drawImage(
