@@ -106,7 +106,7 @@ ul.controls li button:active {
 
 #gamePage div h1 {
 	font-size: 1em;
-	text-align: center;
+	/* text-align: center; */
 }
 
 #highscoresPage ol {

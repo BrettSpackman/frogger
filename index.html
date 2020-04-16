@@ -7,7 +7,7 @@
 </head>
 <body onload = "miniGame.screens.initialize();">
     <!-- <div id = "game" style = "background-image: url('space.jpg');"> -->
-    <div id = "game" width="640" height="700">
+    <div id = "game" width="750" height="700">
 
         <div id = "menuPage" class = "screen">
             <ul class = "menu">
@@ -18,8 +18,18 @@
             </ul>
         </div>
         
-        <div id="gamePage" style="text-align: center; text-justify: auto;" class = "screen">
-                <canvas id = "canvas-main" width="600" height="700" style="background-image: url('http://res.cloudinary.com/dsvfpq1b7/image/upload/v1485602088/Frogger/bg_with_water.png');"></canvas>
+        <div id="gamePage" class = "screen">
+        <div style=" margin: 0 auto; display: flex; justify-content: space-around; height: 700px;">
+                <div style="max-width: 100px; text-align: center;" >
+                    <p>score: </p> 
+                    <p id="score">0</p>
+                    <p>time: </p> 
+                    <p id="time"></p>
+                </div>
+                <div style="max-width: 600px; text-align: center;">
+                    <canvas id = "canvas-main" width="600" height="700" style="background-image: url('http://res.cloudinary.com/dsvfpq1b7/image/upload/v1485602088/Frogger/bg_with_water.png');"></canvas>
+                </div>
+        </div>
         </div>
 
 		<div id = "highscoresPage" class = "screen">
@@ -34,7 +44,7 @@
 
         <div id = "controlsPage" class = "screen">
 			<h1>Customize Controls</h1>
-            <ul class = "controls">
+            <ul id = "button-controls" class = "controls">
                 <li><button id = "id-up">UP</button></li>
                 
                 <li><button id = "id-left">LEFT</button>

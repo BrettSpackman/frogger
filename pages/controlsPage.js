@@ -7,7 +7,10 @@ miniGame.pages['controlsPage'] = (function(screens, input) {
 	}
 
 	function run() {
-		
+		const buttonControls = document.getElementById('button-controls')
+		//buttonControls.innerHTML = '' // deletes all the buttons
+		console.log(buttonControls)
+		console.log(miniGame.utilities)
 	}
 
 	return {

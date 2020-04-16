@@ -12,10 +12,14 @@ miniGame.pages['gamePage'] = (function(model, screens, graphics, input) {
         padFrogs = [],
         pads = [false, false, false, false, false],
         level = 1,
+        frogHit = false;
         car = null,
         log = null,
         cars = [],
         logs = [];
+        let score = 0;
+        let seconds = 30;
+        //let decSeconds = 
 
         const sleep = (milliseconds) => {
             return new Promise(resolve => setTimeout(resolve, milliseconds))
@@ -34,11 +38,13 @@ miniGame.pages['gamePage'] = (function(model, screens, graphics, input) {
 
         createCars();
         createLogs();
+
+        setInterval(decrementSeconds, 1000);
         
-		keyboard.registerCommand('s', frog.moveDown);
-        keyboard.registerCommand('w', frog.moveUp);
-        keyboard.registerCommand('a', frog.moveLeft);
-		keyboard.registerCommand('d', frog.moveRight);
+		keyboard.registerCommand('ArrowDown', frog.moveDown);
+        keyboard.registerCommand('ArrowUp', frog.moveUp);
+        keyboard.registerCommand('ArrowLeft', frog.moveLeft);
+		keyboard.registerCommand('ArrowRight', frog.moveRight);
 
 		keyboard.registerCommand(KeyEvent.DOM_VK_ESCAPE, function() {
 			//
@@ -48,6 +54,10 @@ miniGame.pages['gamePage'] = (function(model, screens, graphics, input) {
 			// Then, return to the main menu
 			screens.showScreen('menuPage');
 		});
+    }
+
+    function decrementSeconds(){
+        seconds -= 1;
     }
 
     function createCars(){
@@ -149,6 +159,8 @@ miniGame.pages['gamePage'] = (function(model, screens, graphics, input) {
 
     function padHit(padNum, frog){
         if(pads[padNum-1] == false){
+            score+=50 + seconds;
+            //score+= seconds*.5;
             pads[padNum-1] = true;
 
             padFrogs.push(
@@ -162,6 +174,7 @@ miniGame.pages['gamePage'] = (function(model, screens, graphics, input) {
                 })
             )
 
+            seconds = 30;
             frog.center.x = 300;
             frog.center.y = 680;
         }
@@ -173,6 +186,7 @@ miniGame.pages['gamePage'] = (function(model, screens, graphics, input) {
 
     function gameOver(){
         pads = [false, false, false, false, false]
+        padFrogs = [];
         deadFrog = miniGame.frog({
             center: {x: frog.center.x, y: frog.center.y},
             radius: 21,
@@ -183,12 +197,14 @@ miniGame.pages['gamePage'] = (function(model, screens, graphics, input) {
         })
         console.log("game over");
 
+        seconds = 30;
         frog.center.y = -80000;   
 
         sleep(1000).then(() => {
             deadFrog = null;
             frog.center.x = 300;
             frog.center.y = 680;  
+            frogHit = false;
           })   
     }
 
@@ -199,26 +215,31 @@ miniGame.pages['gamePage'] = (function(model, screens, graphics, input) {
 	}
 
 	function update(elapsedTime) {
-        //model.update(elapsedTime);
         endHit();
         genCollision();
+        document.getElementById('score').innerHTML = score;
+        document.getElementById('time').innerHTML = seconds;
+        if(seconds == 0) {gameOver();}
     }
     
     function genCollision(){
 
         //console.log(cars)
 
-		for(let i=0;i<cars.length;i++){
-			if(isHit(cars[i])){
-				gameOver();
+        //let frogHit = false;
+
+        if(!frogHit){
+            for(let i=0;i<cars.length;i++){
+                if(isHit(cars[i])){
+                    frogHit = true;
+                    gameOver();
+                }
             }
-            // else{
-            //     console.log("NOT HIT");
-            // }
-		}
+        }
     }
     
     function isHit(curCar){
+        //let time = performance.now();
         if(lineCircleIntersection(
             {x:curCar.center.x - curCar.size.width/2, y:curCar.center.y}, 
             {x:curCar.center.x + curCar.size.width/2, y:curCar.center.y}, 
@@ -226,6 +247,8 @@ miniGame.pages['gamePage'] = (function(model, screens, graphics, input) {
         {
             return true;
         }
+        //let finish = performance.now();
+        //console.log("Collision time: ",finish-time)
     }
 
 	function lineCircleIntersection(pt1, pt2, circle) {
@@ -262,7 +285,7 @@ miniGame.pages['gamePage'] = (function(model, screens, graphics, input) {
             }
         }
 
-        frog.render();
+        if(!frogHit){frog.render();}
 
         for(let i=0; i<padFrogs.length;i++){
             padFrogs[i].render();
