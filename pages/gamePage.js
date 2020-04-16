@@ -7,6 +7,7 @@ miniGame.pages['gamePage'] = (function(model, screens, graphics, input) {
         canvas = document.getElementById("canvas-main"),
         context = canvas.getContext('2d'),
         frog = null,
+        deadFrog = null,
         padFrog = null,
         padFrogs = [],
         pads = [false, false, false, false, false],
@@ -15,6 +16,10 @@ miniGame.pages['gamePage'] = (function(model, screens, graphics, input) {
         log = null,
         cars = [],
         logs = [];
+
+        const sleep = (milliseconds) => {
+            return new Promise(resolve => setTimeout(resolve, milliseconds))
+          }
 
 	function initialize() {
 
@@ -147,7 +152,7 @@ miniGame.pages['gamePage'] = (function(model, screens, graphics, input) {
             pads[padNum-1] = true;
 
             padFrogs.push(
-                pagFrog = miniGame.frog({
+                padFrog = miniGame.frog({
                     center: {x: frog.center.x, y: frog.center.y},
                     radius: 21,
                     moveRate: .1,
@@ -168,9 +173,23 @@ miniGame.pages['gamePage'] = (function(model, screens, graphics, input) {
 
     function gameOver(){
         pads = [false, false, false, false, false]
-        frog.center.x = 300;
-        frog.center.y = 680;
+        deadFrog = miniGame.frog({
+            center: {x: frog.center.x, y: frog.center.y},
+            radius: 21,
+            moveRate: .1,
+            context: context,
+            size: {width: 40, height: 50},
+            imageSrc: '/images/dead.png',
+        })
         console.log("game over");
+
+        frog.center.y = -80000;   
+
+        sleep(1000).then(() => {
+            deadFrog = null;
+            frog.center.x = 300;
+            frog.center.y = 680;  
+          })   
     }
 
 	function processInput(elapsedTime) {
@@ -187,24 +206,27 @@ miniGame.pages['gamePage'] = (function(model, screens, graphics, input) {
     
     function genCollision(){
 
-		for(let i=0;i<cars.;i++){
-			if(!terrainOBJ.segments[i].safe && lineCircleIntersection(terrainOBJ.segments[i].start, terrainOBJ.segments[i].end, rocketOBJ)){
-				console.log("LOSER");
-				screens.showScreen('page-gameover');
-			}
-			else if(terrainOBJ.segments[i].safe && lineCircleIntersection(terrainOBJ.segments[i].start, terrainOBJ.segments[i].end, rocketOBJ)){
-				console.log("WINNER");
-				// if(level==3){
-				// 	cancelNextRequest = true;
-				// 	screens.showScreen('page-mainmenu');
-				// }
-				initialize(level);
-				console.log(level);
-				level++;
-				screens.showScreen('page-game');
-			}
+        //console.log(cars)
+
+		for(let i=0;i<cars.length;i++){
+			if(isHit(cars[i])){
+				gameOver();
+            }
+            // else{
+            //     console.log("NOT HIT");
+            // }
 		}
-	}
+    }
+    
+    function isHit(curCar){
+        if(lineCircleIntersection(
+            {x:curCar.center.x - curCar.size.width/2, y:curCar.center.y}, 
+            {x:curCar.center.x + curCar.size.width/2, y:curCar.center.y}, 
+            frog))
+        {
+            return true;
+        }
+    }
 
 	function lineCircleIntersection(pt1, pt2, circle) {
 		
@@ -254,6 +276,8 @@ miniGame.pages['gamePage'] = (function(model, screens, graphics, input) {
                 cars[i].render(1);
             }
         }
+
+        if(deadFrog != null) {deadFrog.render();}
 	}
 
 	function gameLoop(time) {
