@@ -61,15 +61,15 @@ miniGame.pages['gamePage'] = (function(model, screens, graphics, input) {
         seconds -= 1;
     }
 
-    function tanSleep(milliseconds) {
-        const date = Date.now();
-        let currentDate = null;
-        do {
-            deadFrog.render();
-            console.log(deadFrog);
-          currentDate = Date.now();
-        } while (currentDate - date < milliseconds);
-      }
+    // function tanSleep(milliseconds) {
+    //     const date = Date.now();
+    //     let currentDate = null;
+    //     do {
+    //         deadFrog.render();
+    //         console.log(deadFrog);
+    //       currentDate = Date.now();
+    //     } while (currentDate - date < milliseconds);
+    //   }
 
     function createCars(){
         let StartY = 681
@@ -169,14 +169,6 @@ miniGame.pages['gamePage'] = (function(model, screens, graphics, input) {
     }
 
     function padHit(padNum, frog){
-        allPads = true;
-        for(let i=0;i<pads.length;i++){
-            if(pads[i]==false){
-                allPads = false;
-            }
-        }
-
-        if(allPads == true) { console.log("all pads!!"); score+=1000; }
 
         if(pads[padNum-1] == false){
             score+=50;
@@ -193,6 +185,20 @@ miniGame.pages['gamePage'] = (function(model, screens, graphics, input) {
                     imageSrc: '/images/frog1.png',
                 })
             )
+
+            console.log(pads);
+            allPads = true;
+            for(let i=0;i<pads.length;i++){
+                if(pads[i]==false){
+                    allPads = false;
+                }
+            }
+    
+            if(allPads == true) { 
+                score+=1000; 
+                padsFrogs = [];
+                pads = [false,false,false,false,false];
+            }
 
             seconds = 30;
             progress = 680;
@@ -222,7 +228,6 @@ miniGame.pages['gamePage'] = (function(model, screens, graphics, input) {
         seconds = 30;
         frog.center.y = -80000;   
 
-        //deadFrog.render();
 
         // tanSleep(1000);
         // deadFrog = null;
@@ -230,7 +235,7 @@ miniGame.pages['gamePage'] = (function(model, screens, graphics, input) {
         // frog.center.y = 680;  
         // frogHit = false;
 
-        sleep(1000).then(() => {
+        sleep(1500).then(() => {
             deadFrog = null;
             frog.center.x = 300;
             frog.center.y = 680;  
