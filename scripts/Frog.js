@@ -44,6 +44,7 @@ miniGame.frog = function(spec) {
     }
 
     function render() {
+
         const context = spec.context
         const center = spec.center
         const size = spec.size

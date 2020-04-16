@@ -12,14 +12,15 @@ miniGame.pages['gamePage'] = (function(model, screens, graphics, input) {
         padFrogs = [],
         pads = [false, false, false, false, false],
         level = 1,
+        allPads = false;
+        progress = 680,
         frogHit = false;
         car = null,
         log = null,
         cars = [],
         logs = [];
         let score = 0;
-        let seconds = 30;
-        //let decSeconds = 
+        let seconds = 15;
 
         const sleep = (milliseconds) => {
             return new Promise(resolve => setTimeout(resolve, milliseconds))
@@ -60,6 +61,16 @@ miniGame.pages['gamePage'] = (function(model, screens, graphics, input) {
         seconds -= 1;
     }
 
+    function tanSleep(milliseconds) {
+        const date = Date.now();
+        let currentDate = null;
+        do {
+            deadFrog.render();
+            console.log(deadFrog);
+          currentDate = Date.now();
+        } while (currentDate - date < milliseconds);
+      }
+
     function createCars(){
         let StartY = 681
         console.log("adding cars!")
@@ -79,13 +90,13 @@ miniGame.pages['gamePage'] = (function(model, screens, graphics, input) {
                         imageSrc: '/images/car'+i+'.png',
                         })
                 );
-                xpos += Math.round(Math.random()*200+1.5*w)
+                xpos += Math.round(Math.random()*300+1.5*w)
             }
         }
     }
 
     function createLogs(){
-        let StartY = 357
+        let StartY = 356
         for(let i=1;i<=5;i++){
             let w = 50;
             if(i==2){ w *= 2; }
@@ -136,20 +147,20 @@ miniGame.pages['gamePage'] = (function(model, screens, graphics, input) {
     
     function endHit(){
         if(frog.center.y <= 40){
-            if(frog.center.x == 84) {
+            if(frog.center.x >= 84-frog.radius && frog.center.x <= 84+frog.radius) {
                 padHit(1, frog);
             }
-            else if(frog.center.x == 192) {
-                padHit(2, frog);
+            else if(frog.center.x >= 192-frog.radius && frog.center.x <= 192+frog.radius) {
+              padHit(2, frog);
             }
-            else if(frog.center.x == 300) {
-                padHit(3, frog);
+            else if(frog.center.x >= 300-frog.radius && frog.center.x <= 300+frog.radius) {
+              padHit(3, frog);
             }
-            else if(frog.center.x == 408) {
-                padHit(4, frog);
+            else if(frog.center.x >= 408-frog.radius && frog.center.x <= 408+frog.radius) {
+              padHit(4, frog);
             }
-            else if(frog.center.x == 516) {
-                padHit(5, frog);
+            else if(frog.center.x >= 516-frog.radius && frog.center.x <= 516+frog.radius) {
+              padHit(5, frog);
             }
             else {
                 gameOver();
@@ -158,9 +169,18 @@ miniGame.pages['gamePage'] = (function(model, screens, graphics, input) {
     }
 
     function padHit(padNum, frog){
+        allPads = true;
+        for(let i=0;i<pads.length;i++){
+            if(pads[i]==false){
+                allPads = false;
+            }
+        }
+
+        if(allPads == true) { console.log("all pads!!"); score+=1000; }
+
         if(pads[padNum-1] == false){
-            score+=50 + seconds;
-            //score+= seconds*.5;
+            score+=50;
+            score+=seconds*5;
             pads[padNum-1] = true;
 
             padFrogs.push(
@@ -174,7 +194,8 @@ miniGame.pages['gamePage'] = (function(model, screens, graphics, input) {
                 })
             )
 
-            seconds = 30;
+            seconds = 15;
+            progress = 680;
             frog.center.x = 300;
             frog.center.y = 680;
         }
@@ -186,6 +207,7 @@ miniGame.pages['gamePage'] = (function(model, screens, graphics, input) {
 
     function gameOver(){
         pads = [false, false, false, false, false]
+        progress = 680;
         padFrogs = [];
         deadFrog = miniGame.frog({
             center: {x: frog.center.x, y: frog.center.y},
@@ -197,8 +219,16 @@ miniGame.pages['gamePage'] = (function(model, screens, graphics, input) {
         })
         console.log("game over");
 
-        seconds = 30;
+        seconds = 15;
         frog.center.y = -80000;   
+
+        //deadFrog.render();
+
+        // tanSleep(1000);
+        // deadFrog = null;
+        // frog.center.x = 300;
+        // frog.center.y = 680;  
+        // frogHit = false;
 
         sleep(1000).then(() => {
             deadFrog = null;
@@ -217,9 +247,21 @@ miniGame.pages['gamePage'] = (function(model, screens, graphics, input) {
 	function update(elapsedTime) {
         endHit();
         genCollision();
+        incrementProg();
+        if(frog.center.y < 305 && frog.center.y > 42){
+            console.log("in river");
+            if(!onLog()){ gameOver();}
+        }
         document.getElementById('score').innerHTML = score;
         document.getElementById('time').innerHTML = seconds;
         if(seconds == 0) {gameOver();}
+    }
+
+    function incrementProg(){
+        if(frog.center.y < progress){
+            score+=10;
+            progress = frog.center.y;
+        }
     }
     
     function genCollision(){
@@ -251,6 +293,23 @@ miniGame.pages['gamePage'] = (function(model, screens, graphics, input) {
         //console.log("Collision time: ",finish-time)
     }
 
+    function onLog(){
+        let on = false;
+        logs.forEach(l => {
+            if(frog.center.y == l.center.y){
+                if(frog.center.x >= l.center.x-l.size.width && frog.center.x <= l.center.x+l.size.width){
+                    if(!on){
+                        if(l.center.y == 248 || l.center.y ==140){frog.center.x += l.moveRate;}
+                        else {frog.center.x -= l.moveRate;}
+                        // console.log("frog is on a log")
+                        on = true;
+                    }
+                }
+            }
+        });
+        return true;
+    }
+
 	function lineCircleIntersection(pt1, pt2, circle) {
 		
 		let v1 = { x: pt2.x - pt1.x, y: pt2.y - pt1.y };
@@ -277,7 +336,7 @@ miniGame.pages['gamePage'] = (function(model, screens, graphics, input) {
         graphics.clear();
 
         for(let i=0; i<logs.length;i++){
-            if(logs[i].center.y == 303 || logs[i].center.y == 195 || logs[i].center.y == 87){
+            if(logs[i].center.y == 302 || logs[i].center.y == 194 || logs[i].center.y == 86){
                 logs[i].render(-1);
             }
             else{
